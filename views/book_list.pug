@@ -3,6 +3,19 @@ extends layout
 block content
   h1= title
   
+  form.form(method='GET' action='')
+    div.field-container
+      label(for='search') Name or Author
+      input#search.form-input(type='text', placeholder='Search' name='q')
+    div.field-container
+      label(for='author') Author:
+      select#author.form-control(type='select', placeholder='Select author' name='author' )
+        - author_list.sort(function(a, b) {let textA = a.family_name.toUpperCase(); let textB = b.family_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        option(value="") Please select
+        for author in author_list
+            option(value=author._id) #{author.name}
+    button.form-submit-button(type='submit') Filter
+
   ul
     each book in book_list
       li 
