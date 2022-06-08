@@ -2,20 +2,20 @@ const Book = require('../../models/Book');
 const Author = require('../../models/Author');
 
 module.exports = function (req, res, next) {
-  const $or = [];
+  const $searchQueries = [];
 
   if (req.query.q) {
     const searchText = decodeURI(req.query.q);
-    $or.push({ title: searchText });
+    $searchQueries.push({ title: searchText });
   }
 
   if (req.query.author) {
     const authorId = decodeURI(req.query.author);
-    $or.push({ author: authorId });
+    $searchQueries.push({ author: authorId });
   }
 
   Book
-    .find($or.length ? { $or } : {}, 'title author')
+    .find($searchQueries.length ? { $searchQueries } : {}, 'title author')
     .sort({ title: 1 })
     .populate('author')
     .exec(function (err, listBooks) {
